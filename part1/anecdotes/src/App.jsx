@@ -12,6 +12,10 @@ const Generater = (props) => {
     )
 }
 
+const Hi = () => {
+
+}
+
 const Vote = (props) => {
     return (
         <button onClick={() => props.setvote(prev => {
