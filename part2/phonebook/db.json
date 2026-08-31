@@ -1,15 +1,4 @@
 {
-  "persons": [
-    {
-      "name": "lio",
-      "number": "10",
-      "id": "OqzKZpVQdfY"
-    },
-    {
-      "name": "m",
-      "number": "1",
-      "id": "LZGi1flNSPA"
-    }
-  ],
+  "persons": [],
   "$schema": "./node_modules/json-server/schema.json"
 }
