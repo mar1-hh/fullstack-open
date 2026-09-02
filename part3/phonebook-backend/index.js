@@ -1,4 +1,5 @@
 const express = require('express')
+const morgan = require('morgan')
 const Port = 3001
 const app = express()
 
@@ -31,6 +32,12 @@ const generatId = () => {
 }
 
 app.use(express.json())
+morgan.token("body", (req) => {
+    return (JSON.stringify(req.body))
+})
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
+
 
 app.get('/api/persons', (req, res) => {
     res.status(200).json(notes)
@@ -56,7 +63,7 @@ app.delete('/api/persons/:id', (req, res) => {
 app.post('/api/persons/', (req, res) => {
     const body = req.body
     const id = generatId()
-
+    
     if (!body.name || !body.number)
         return (res.status(400).json({error: 'name or number is missing'}))
     if (notes.find(n => n.name === body.name))
@@ -71,13 +78,13 @@ app.get('/info', (req, res) => {
         <p>Phonebook has info for ${notes.length} people<p/>
         <p>${new Date()}<p/>
         `)
-})
-
-app.get('/', (req, res) => {
-    res.send('something')
-})
-
-
-app.listen(Port, () => {
-    console.log(`server running on port ${Port}`)
+    })
+    
+    app.get('/', (req, res) => {
+        res.send('something')
+    })
+    
+    
+    app.listen(Port, () => {
+        console.log(`server running on port ${Port}`)
 })
