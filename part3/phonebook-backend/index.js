@@ -1,8 +1,16 @@
 const express = require('express')
 const morgan = require('morgan')
+// const cors = require('cors')
 const Port = 3001
 const app = express()
 
+// const corsOption = {
+//     origin: "http://localhost:5173"
+// }
+
+// app.use(cors(corsOption))
+
+app.use(express.static("dist"))
 
 let notes = [
     { 

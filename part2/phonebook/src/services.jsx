@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-const baseUrl = "http://localhost:3001/persons"
+const baseUrl = "/api"
 
 const showAll = () => {
-    const req = axios.get(baseUrl);
+    const req = axios.get(`${baseUrl}/persons`);
     return (req.then(res => res.data))
 }
 
