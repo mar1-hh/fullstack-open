@@ -94,6 +94,7 @@ const Persons = (props) => {
   const deletePhone = (phone) => {
     if (window.confirm(`Delete ${phone.name} ?`))
     {
+      console.log(phone.id)
       serv.remove(phone.id).then(() => props.setPersons(props.persons.filter(person => person.id !== phone.id)))
     }
   }
