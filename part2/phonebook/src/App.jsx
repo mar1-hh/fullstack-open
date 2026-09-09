@@ -29,6 +29,23 @@ const AddNotif = ({notif}) => {
   )
 }
 
+const ErrNotif = ({notif}) => {
+  if (notif === null)
+    return (null)
+  const notifStyle = {
+    color: 'red',
+    border: `2px solid red`,
+    padding: '10px',
+    background: "ligthgrey"
+  }
+
+  return (
+    <div style={notifStyle}>
+      {notif}
+    </div>
+  )
+}
+
 const PersonForm = (props) => {
 
   const addPerson = (event) => {
@@ -60,11 +77,21 @@ const PersonForm = (props) => {
       name: props.newName,
       number: props.newNumber
     }
-    serv.create(newObj).then(returned => props.setPersons(props.persons.concat(returned)))
-    props.setNotf(`Added ${props.newName}`)
-    setTimeout(() => props.setNotf(null), 5000)
-    props.setNewNumber('');
-    props.setNewName('');
+    serv.create(newObj).then(returned => {
+      props.setPersons(props.persons.concat(returned))
+      props.setNotf(`Added ${props.newName}`)
+      setTimeout(() => props.setNotf(null), 5000)
+      props.setNewNumber('');
+      props.setNewName('');
+    }).catch(err => {
+      console.log("ana hnaaaadfj")
+      props.setNotfErr(err.response.data.error)
+      console.log("ana hnaaaadfj2")
+      setTimeout(() => {
+        props.setNotfErr(null)
+        return ;
+      }, 5000)
+    })
   }
   const addInputName = (event) => {
     props.setNewName(event.target.value)
@@ -126,6 +153,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newSearch, setSearch] = useState('')
   const [notif, setNotf] = useState(null)
+  const [notifErr, setNotfErr] = useState(null)
 
   const addInputSearch = (event) => {
     setSearch(event.target.value)
@@ -142,10 +170,11 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <AddNotif notif={notif} />
+      <ErrNotif notif={notifErr} />
       <Filter newSearch={newSearch} addInputSearch={addInputSearch}/>
       <h3>add a new</h3>
       <PersonForm newName={newName} newNumber={newNumber} setNewName={setNewName} setNewNumber={setNewNumber}
-        persons={persons} setPersons={setPersons} setNotf={setNotf}/>
+        persons={persons} setPersons={setPersons} setNotf={setNotf} setNotfErr={setNotfErr}/>
       <h2>Numbers</h2>
       <Persons persons={persons} newSearch={newSearch} setPersons={setPersons}/>
     </div>
