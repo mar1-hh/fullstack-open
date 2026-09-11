@@ -61,6 +61,7 @@ test('add new blog', async () => {
     await api.post('/api/blogs').send(newBlog).expect(201)
         .expect('Content-Type', /application\/json/)
     const blogs = await api.get('/api/blogs')
+    console.log(blogs.body)
     assert.strictEqual(blogs.body.length, initialBlogs.length + 1)
     assert(blogs.body.some(blog => blog.author === 'Author D'))
 })
@@ -83,6 +84,24 @@ test('blog without title or url', async () => {
     }
     const blog = await api.post('/api/blogs').send(newBlog)
     assert.strictEqual(blog.status, 400)
+})
+
+test('delete a blog', async () => {
+    const blogs = await api.get('/api/blogs')
+    const res = await api.delete(`/api/blogs/${blogs.body[0].id}`)
+    const afterDel = await api.get('/api/blogs')
+
+    assert.strictEqual(res.status, 200)
+    assert.strictEqual(afterDel.body.length, initialBlogs.length - 1)
+})
+
+test('update a blog', async () => {
+    const blogs = await api.get('/api/blogs')
+    const res = await api.put(`/api/blogs/${blogs.body[0].id}`).send({likes: 1337})
+    const afterUpdate = await api.get('/api/blogs')
+
+    assert.strictEqual(res.status, 200)
+    assert.strictEqual(afterUpdate.body[0].likes, 1337)
 })
 
 after(async () => {
