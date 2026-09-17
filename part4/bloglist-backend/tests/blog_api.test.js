@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
+
+const User = require('../models/user')
 const assert = require('node:assert')
 
 
@@ -29,10 +31,24 @@ const initialBlogs = [
     }
 ]
 
+const initialUsers = [
+    {
+        username: "7mida",
+        name: "sii",
+        password: "1234"
+    }
+]
+
 beforeEach(async () => {
     await Blog.deleteMany() 
     await Blog.insertMany(initialBlogs)
+    await User.deleteMany()
+    await User.insertMany(initialUsers)
 })
+
+// test('useranme must be unique', async () => {
+//     await 
+// })
 
 test('blogs are returned as json', async () => {
   await api
