@@ -1,7 +1,7 @@
 const config = require('./utils/config')
 const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
-const tokenExtractor = require('./middleware/blog.middleware')
+const blogMiddleware = require('./middleware/blog.middleware')
 const express = require('express')
 const mongoose = require('mongoose')
 
@@ -12,7 +12,7 @@ mongoose.connect(mongoUrl, { family: 4 })
 
 app.use(express.json())
 
-app.use('/api/blogs', tokenExtractor, blogsRouter)
+app.use('/api/blogs', blogMiddleware.tokenExtractor, blogMiddleware.userExtractor, blogsRouter)
 app.use('/api/users', usersRouter)
 
 const errorHandler = (error, request, response, next) => {

@@ -11,12 +11,8 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.delete('/:id', async (req, res) => {
   const id = req.params.id
-  const decodedToken = jwt.verify(req.token, process.env.SECRET)
-  if (!decodedToken)
-    return res.status(401).json({ error: 'token invalid' })
-  const user = await User.findById(decodedToken.id)
-  if (!user)
-    return res.status(400).json({ error: 'UserId missing or not valid' })
+  const user = req.user
+  
   const blog = await Blog.findById(id)
  if (blog.user.toString() !== user._id.toString())
     return (res.status(400).json({error: "the creater and delter not the same"}))
@@ -37,12 +33,8 @@ blogsRouter.post('/', async (request, response) => {
     request.body['likes'] = 0
   if (request.body.title === undefined || request.body.url === undefined)
     return (response.status(400).end())
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (!decodedToken)
-    return response.status(401).json({ error: 'token invalid' })
-  const user = await User.findById(decodedToken.id)
-  if (!user)
-    return response.status(400).json({ error: 'UserId missing or not valid' })
+  
+  const user = request.user
   const blog = new Blog(request.body)
 
   blog.save().then((result) => {
