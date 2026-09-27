@@ -1,7 +1,6 @@
 const Blog = require('../models/blog')
 const blogsRouter = require('express').Router()
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
+
 
 blogsRouter.get('/', async (request, response) => {
 
@@ -14,7 +13,8 @@ blogsRouter.delete('/:id', async (req, res) => {
   const user = req.user
   
   const blog = await Blog.findById(id)
- if (blog.user.toString() !== user._id.toString())
+  console.log(blog)
+  if (blog.user.toString() !== user._id.toString())
     return (res.status(400).json({error: "the creater and delter not the same"}))
   await Blog.findByIdAndDelete(id)
   res.status(200).end()
@@ -35,10 +35,10 @@ blogsRouter.post('/', async (request, response) => {
     return (response.status(400).end())
   
   const user = request.user
+  // console.log(request.body)
   const blog = new Blog(request.body)
 
   blog.save().then((result) => {
-    console.log(user)
     user.blogs = user.blogs.concat(result._id)
     user.save().then(() => {
       response.status(201).json(result)

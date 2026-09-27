@@ -26,7 +26,6 @@ userRouter.post('/register', async (req, res, next) => {
         passwordHash
     })
     try{
-
         const user = await newUser.save()
         res.status(201).json(user)
     } catch (err) {
@@ -49,7 +48,7 @@ userRouter.post('/login', async (req, res, next) => {
         id: user._id
     }
     const token = jwt.sign(userToken, process.env.SECRET)
-    res.status(200).json({token, username: user.username, name: user.name})
+    res.status(200).json({token, username: user.username, name: user.name, id: user.id})
 })
 
 module.exports = userRouter

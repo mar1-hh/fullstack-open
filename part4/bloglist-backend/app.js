@@ -4,9 +4,10 @@ const usersRouter = require('./controllers/users')
 const blogMiddleware = require('./middleware/blog.middleware')
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 
 const app = express()
-
+app.use(cors())
 const mongoUrl = config.MONGODB_URI
 mongoose.connect(mongoUrl, { family: 4 })
 
